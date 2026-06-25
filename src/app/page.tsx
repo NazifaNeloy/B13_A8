@@ -1,6 +1,6 @@
 import Link from "next/link";
 import productsData from "@/data/products.json";
-import { Sun, Star, Flame, Sparkles, Droplet, Shield, Heart, ArrowRight } from "lucide-react";
+import { Sun, Star, Flame, Sparkles, Droplet, Shield, Heart, ArrowRight, Truck } from "lucide-react";
 
 export default function Home() {
   // Grab first 3 products for the Popular Products section
@@ -54,7 +54,7 @@ export default function Home() {
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 tracking-tight leading-tight">
               Sun-Kissed Style, <br />
-              <span className="text-transparent bg-clip-text summer-gradient">
+              <span className="text-gradient">
                 Summer Perfection
               </span>
             </h1>
@@ -83,8 +83,36 @@ export default function Home() {
           </div>
 
           {/* Hero Right Banner Image */}
-          <div className="lg:col-span-5 flex justify-center items-center animate__animated animate__fadeInRight">
-            <div className="relative w-full max-w-sm sm:max-w-md aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/60">
+          <div className="lg:col-span-5 flex justify-center items-center relative py-8 animate__animated animate__fadeInRight">
+            {/* Glowing Background Radial */}
+            <div className="absolute w-72 h-72 bg-amber-400/30 rounded-full filter blur-3xl animate-pulse-slow"></div>
+
+            {/* Rotating Sun Ring */}
+            <div className="absolute -top-4 -right-4 w-28 h-28 bg-gradient-to-br from-amber-300 to-orange-400 rounded-full opacity-20 filter blur-sm animate-spin-slow"></div>
+
+            {/* Floating Badges */}
+            {/* Badge 1: Top Left */}
+            <div className="absolute top-10 -left-6 z-20 glass-card rounded-2xl px-4 py-2.5 shadow-xl flex items-center gap-2.5 border border-white/60 animate-float-delayed">
+              <span className="p-1.5 bg-amber-500 rounded-lg text-white font-bold text-xs">50%</span>
+              <div className="flex flex-col text-left">
+                <span className="text-[9px] text-stone-400 font-bold uppercase leading-none">Mega Sale</span>
+                <span className="text-xs font-black text-stone-800 mt-1">Summer Deal</span>
+              </div>
+            </div>
+
+            {/* Badge 2: Bottom Right */}
+            <div className="absolute bottom-12 -right-4 z-20 glass-card rounded-2xl px-4 py-2.5 shadow-xl flex items-center gap-2.5 border border-white/60 animate-float">
+              <span className="p-1.5 bg-sky-500 rounded-lg text-white">
+                <Truck className="h-4 w-4" />
+              </span>
+              <div className="flex flex-col text-left">
+                <span className="text-[9px] text-stone-400 font-bold uppercase leading-none">Shipping</span>
+                <span className="text-xs font-black text-stone-800 mt-1">Free & Fast</span>
+              </div>
+            </div>
+
+            {/* Main Floating Image Container */}
+            <div className="relative w-full max-w-sm aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/80 animate-float">
               <img
                 src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
                 alt="Beautiful Summer Beach Essentials"
