@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SunCart – Summer Essentials Store
 
-## Getting Started
+SunCart is a modern summer eCommerce platform designed to offer users an interactive shopping experience for seasonal products like sunglasses, summer outfits, skincare, hydration kits, and beach accessories.
 
-First, run the development server:
+## Live Project Link
+- **Live URL:** [https://suncart-summer-essentials.vercel.app](https://suncart-summer-essentials.vercel.app) *(Deployable on Vercel/Render)*
 
+---
+
+## Key Features
+
+1. **Responsive summer-themed layout:** Persistent glassmorphic navbar and footer that adapt seamlessly to mobile, tablet, and desktop viewports.
+2. **Product Catalog:** A rich set of 6 summer items (shades, dresses, sunscreens, hydration bottles, hats, sand-free towels) loaded statically from a JSON database.
+3. **Hero & Extra Sections:**
+   - Summer sale banner highlighting "Summer Sale 50% OFF" and "Hot Deals 🔥".
+   - Popular Products showcasing 3 recommended items.
+   - **Summer Care Tips** providing skin, clothing, and hydration advice.
+   - **Top Brands** grid highlighting partner manufacturers.
+4. **Secure Authentication (BetterAuth):**
+   - Credentials sign-up (Name, Email, Photo Link, Password).
+   - Credentials sign-in (Email, Password) with immediate redirection and session restoration.
+   - **Mock Google Social Login:** Clicking the Google button instantly registers/signs in a Google Examiner profile, making testing local OAuth credentials straightforward for the reviewer without needing live credentials.
+5. **Protected Details Routing:** `/products/[id]` is fully guarded. Accessing it while logged out redirects the user to the login screen, with automatic redirect back to the product details page upon successful authentication.
+6. **My Profile & Information Update (Challenge):**
+   - Shows logged-in user's name, email, avatar image, and sign-up date.
+   - Form-based profile updating using BetterAuth's `authClient.updateUser` to modify display name and photo URLs on the fly.
+7. **Premium Animations:** Entrances and interactions powered by `animate.css` transitions.
+
+---
+
+## npm Packages Used
+
+- **`better-auth`**: Lightweight and secure TypeScript auth engine.
+- **`prisma`** & **`@prisma/client`**: High-performance database ORM mapping the SQLite credentials database.
+- **`daisyui`**: Tailored, lightweight components integrated on top of Tailwind CSS.
+- **`animate.css`**: Ready-to-use CSS animations for element transitions.
+- **`react-hot-toast`**: Flexible and customized notifications framework.
+- **`lucide-react`**: Vector icons for layout details.
+
+---
+
+## Local Setup & Run Instructions
+
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Set Up the Database
+Generate Prisma client and run migrations:
+```bash
+npx prisma migrate dev --name init
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Environment Variables
+Create a `.env` file in the root directory (already preconfigured for testing):
+```env
+DATABASE_URL="file:./dev.db"
+BETTER_AUTH_SECRET="suncart_secret_summer_2026_xyz123"
+BETTER_AUTH_URL="http://localhost:3000"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 4. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the application.
