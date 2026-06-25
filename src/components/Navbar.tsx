@@ -5,11 +5,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Sun, Menu, LogOut, User as UserIcon, ShoppingBag } from "lucide-react";
 import toast from "react-hot-toast";
+import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
+  const { cartCount } = useCart();
 
   const handleLogout = async () => {
     try {
@@ -106,6 +108,20 @@ export default function Navbar() {
 
         {/* Navbar End */}
         <div className="navbar-end gap-3">
+          {/* Shopping Cart Button */}
+          <Link
+            href="/cart"
+            className="btn btn-ghost btn-circle relative hover:bg-amber-50 hover:text-amber-600 text-stone-600 transition-colors"
+            aria-label="Shopping Cart"
+          >
+            <ShoppingBag className="h-6 w-6" />
+            {cartCount > 0 && (
+              <span className="badge badge-sm bg-amber-500 text-white font-bold absolute top-1.5 right-1.5 h-5 min-w-5 flex items-center justify-center rounded-full border-none shadow-sm text-[10px]">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+
           {isPending ? (
             <span className="loading loading-spinner loading-md text-amber-500"></span>
           ) : session?.user ? (

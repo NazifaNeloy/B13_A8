@@ -1,10 +1,11 @@
 "use client";
 
 import { Toaster } from "react-hot-toast";
+import { CartProvider } from "@/context/CartContext";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <CartProvider>
       <Toaster
         position="top-right"
         toastOptions={{
@@ -28,6 +29,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         }}
       />
       {children}
-    </>
+    </CartProvider>
   );
 }

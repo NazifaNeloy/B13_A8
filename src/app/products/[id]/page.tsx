@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import productsData from "@/data/products.json";
 import { Star, ArrowLeft, ShieldCheck, Truck, RefreshCw, ShoppingCart, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
+import { useCart } from "@/context/CartContext";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -17,6 +18,7 @@ export default function ProductDetails({ params }: PageProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { data: session, isPending } = authClient.useSession();
+  const { addToCart } = useCart();
 
   const productId = parseInt(resolvedParams.id);
   const product = productsData.find((p) => p.id === productId);
@@ -57,7 +59,7 @@ export default function ProductDetails({ params }: PageProps) {
   }
 
   const handleAddToCart = () => {
-    toast.success(`${product.name} added to cart!`);
+    addToCart(product);
   };
 
   return (
