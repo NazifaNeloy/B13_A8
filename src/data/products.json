@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "UV Protection Sunglasses",
+    "brand": "SunShade",
+    "price": 15,
+    "rating": 4.7,
+    "stock": 10,
+    "description": "Stylish UV protection sunglasses perfect for summer outings and beach days.",
+    "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80",
+    "category": "Accessories"
+  },
+  {
+    "id": 2,
+    "name": "Floral Summer Dress",
+    "brand": "BreezeFit",
+    "price": 32,
+    "rating": 4.5,
+    "stock": 15,
+    "description": "Lightweight, breathable floral print summer dress designed for maximum comfort.",
+    "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80",
+    "category": "Apparel"
+  },
+  {
+    "id": 3,
+    "name": "Broad Spectrum Sunscreen SPF 50",
+    "brand": "SolGuard",
+    "price": 19,
+    "rating": 4.9,
+    "stock": 25,
+    "description": "Non-greasy, water-resistant sunscreen formula providing maximum UV defense.",
+    "image": "https://images.unsplash.com/photo-1556229174-5e42a09e45af?auto=format&fit=crop&w=600&q=80",
+    "category": "Skincare"
+  },
+  {
+    "id": 4,
+    "name": "Insulated Stainless Steel Bottle",
+    "brand": "HydroFlow",
+    "price": 24,
+    "rating": 4.8,
+    "stock": 30,
+    "description": "Double-wall insulated bottle that keeps your summer beverages ice-cold for 24 hours.",
+    "image": "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=600&q=80",
+    "category": "Hydration"
+  },
+  {
+    "id": 5,
+    "name": "Woven Straw Beach Hat",
+    "brand": "TropicCap",
+    "price": 18,
+    "rating": 4.4,
+    "stock": 12,
+    "description": "Wide-brim straw hat offering stylish sun protection for pool and beach days.",
+    "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80",
+    "category": "Accessories"
+  },
+  {
+    "id": 6,
+    "name": "Oversized Sand-Free Beach Towel",
+    "brand": "ShoreSide",
+    "price": 22,
+    "rating": 4.6,
+    "stock": 8,
+    "description": "Microfiber sand-repellent beach towel that dries 3x faster than normal cotton towels.",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80",
+    "category": "Beach Gear"
+  }
+]
