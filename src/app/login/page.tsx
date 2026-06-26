@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { Sun, Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { Sun, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
 function LoginForm() {
@@ -114,15 +114,7 @@ function LoginForm() {
         </p>
       </div>
 
-      {/* Admin Credentials Hint Card */}
-      <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4.5 mb-6 text-left text-xs text-amber-800 flex gap-3 items-start animate__animated animate__fadeIn">
-        <ShieldCheck className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-        <div className="flex flex-col">
-          <span className="font-extrabold text-[13px] text-amber-900 mb-1.5">🔑 Quick Admin Credentials:</span>
-          <span><strong>Email:</strong> <code className="bg-white/80 px-1.5 py-0.5 rounded text-[11px] font-bold select-all">admin@suncart.com</code></span>
-          <span className="mt-1"><strong>Password:</strong> <code className="bg-white/80 px-1.5 py-0.5 rounded text-[11px] font-bold select-all">adminpassword123</code></span>
-        </div>
-      </div>
+
 
       {errorMsg && (
         <div className="alert alert-error rounded-2xl py-3 px-4 text-xs font-semibold mb-6 flex gap-2 animate__animated animate__shakeX">
