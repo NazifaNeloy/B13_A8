@@ -3,7 +3,7 @@
 SunCart is a modern summer eCommerce platform designed to offer users an interactive shopping experience for seasonal products like sunglasses, summer outfits, skincare, hydration kits, and beach accessories.
 
 ## Live Project Link
-- **Live URL:** [https://suncart-summer-essentials.vercel.app](https://suncart-summer-essentials.vercel.app) *(Deployable on Vercel/Render)*
+- **Live URL:** [suncart-summer-essentials](https://b13-a8-p9y1-git-main-nazifaneloys-projects.vercel.app/) 
 
 ---
 
