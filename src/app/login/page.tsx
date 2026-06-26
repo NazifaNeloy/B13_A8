@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { Sun, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Sun, Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import toast from "react-hot-toast";
 
 function LoginForm() {
@@ -29,7 +29,7 @@ function LoginForm() {
       return;
     }
 
-    try {
+    const attemptSignIn = async () => {
       await authClient.signIn.email(
         {
           email,
@@ -45,88 +45,66 @@ function LoginForm() {
             router.push(callbackUrl);
             router.refresh();
           },
-          onError: (ctx) => {
-            setIsLoading(false);
-            setErrorMsg(ctx.error.message || "Invalid email or password.");
-            toast.error(ctx.error.message || "Login failed");
-          },
-        }
-      );
-    } catch (err: any) {
-      setIsLoading(false);
-      setErrorMsg(err.message || "Something went wrong.");
-      toast.error(err.message || "Something went wrong.");
-    }
-  };
-
-  const handleMockGoogleLogin = async () => {
-    const mockEmail = "google-examiner@suncart.com";
-    const mockName = "Google Examiner";
-    const mockImage = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80";
-    const mockPassword = "GoogleMockPassword123!";
-
-    try {
-      toast.loading("Connecting mock Google account...", { id: "google-auth" });
-
-      await authClient.signIn.email(
-        {
-          email: mockEmail,
-          password: mockPassword,
-        },
-        {
-          onSuccess: () => {
-            toast.success("Successfully logged in as Google User!", { id: "google-auth" });
-            router.push(callbackUrl);
-            router.refresh();
-          },
           onError: async (ctx) => {
-            // If account doesn't exist, create it then sign in
+            // Self-healing: If user tries to login with admin credentials but the DB is blank
             if (
-              ctx.error.message.toLowerCase().includes("credentials") ||
-              ctx.error.message.toLowerCase().includes("user") ||
-              ctx.error.message.toLowerCase().includes("invalid")
+              email === "admin@suncart.com" &&
+              password === "adminpassword123" &&
+              (ctx.error.message.toLowerCase().includes("credentials") ||
+                ctx.error.message.toLowerCase().includes("user") ||
+                ctx.error.message.toLowerCase().includes("invalid"))
             ) {
               try {
+                toast.loading("Provisioning default admin session...", { id: "admin-auth" });
+                // Sign up the admin user
                 await authClient.signUp.email({
-                  email: mockEmail,
-                  password: mockPassword,
-                  name: mockName,
-                  image: mockImage,
+                  email: "admin@suncart.com",
+                  password: "adminpassword123",
+                  name: "Admin User",
+                  image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
                 });
 
+                // Sign in the admin user
                 await authClient.signIn.email(
                   {
-                    email: mockEmail,
-                    password: mockPassword,
+                    email: "admin@suncart.com",
+                    password: "adminpassword123",
                   },
                   {
                     onSuccess: () => {
-                      toast.success("Successfully logged in as Google User!", { id: "google-auth" });
+                      toast.success("Admin Session Activated!", { id: "admin-auth" });
+                      setIsLoading(false);
                       router.push(callbackUrl);
                       router.refresh();
                     },
                     onError: (ctx2) => {
-                      toast.error(ctx2.error.message || "Failed mock login", { id: "google-auth" });
+                      setIsLoading(false);
+                      setErrorMsg(ctx2.error.message || "Failed admin sign-in.");
+                      toast.error("Failed admin sign-in.", { id: "admin-auth" });
                     },
                   }
                 );
               } catch (signUpErr: any) {
-                toast.error(signUpErr.message || "Failed to register mock Google account", { id: "google-auth" });
+                setIsLoading(false);
+                setErrorMsg("Failed to auto-provision Admin account.");
+                toast.error("Failed to auto-provision Admin account.", { id: "admin-auth" });
               }
             } else {
-              toast.error(ctx.error.message || "Failed mock login", { id: "google-auth" });
+              setIsLoading(false);
+              setErrorMsg(ctx.error.message || "Invalid email or password.");
+              toast.error(ctx.error.message || "Login failed");
             }
           },
         }
       );
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong", { id: "google-auth" });
-    }
+    };
+
+    await attemptSignIn();
   };
 
   return (
     <div className="w-full max-w-md glass-card rounded-3xl shadow-2xl p-8 sm:p-10 border border-white/50 animate__animated animate__fadeInUp">
-      <div className="flex flex-col items-center mb-8">
+      <div className="flex flex-col items-center mb-6">
         <div className="p-3 bg-amber-500 rounded-2xl text-white shadow-lg shadow-amber-500/30 mb-4">
           <Sun className="h-8 w-8 animate__animated animate__spin animate__slow animate__infinite" />
         </div>
@@ -134,6 +112,16 @@ function LoginForm() {
         <p className="text-stone-500 text-sm mt-2 text-center">
           Login to manage your summer shopping cart
         </p>
+      </div>
+
+      {/* Admin Credentials Hint Card */}
+      <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4.5 mb-6 text-left text-xs text-amber-800 flex gap-3 items-start animate__animated animate__fadeIn">
+        <ShieldCheck className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+        <div className="flex flex-col">
+          <span className="font-extrabold text-[13px] text-amber-900 mb-1.5">🔑 Quick Admin Credentials:</span>
+          <span><strong>Email:</strong> <code className="bg-white/80 px-1.5 py-0.5 rounded text-[11px] font-bold select-all">admin@suncart.com</code></span>
+          <span className="mt-1"><strong>Password:</strong> <code className="bg-white/80 px-1.5 py-0.5 rounded text-[11px] font-bold select-all">adminpassword123</code></span>
+        </div>
       </div>
 
       {errorMsg && (
@@ -193,52 +181,12 @@ function LoginForm() {
         {/* Login Button */}
         <button
           type="submit"
-          className="btn w-full bg-amber-500 hover:bg-amber-600 border-none text-white rounded-2xl font-bold py-3 mt-4 shadow-lg shadow-amber-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:bg-amber-300"
+          className="btn w-full bg-amber-500 hover:bg-amber-600 border-none text-white rounded-2xl font-bold py-3.5 mt-4 shadow-lg shadow-amber-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:bg-amber-300 flex items-center justify-center"
           disabled={isLoading}
         >
           {isLoading ? <span className="loading loading-spinner loading-sm"></span> : "Sign In"}
         </button>
       </form>
-
-      {/* Divider */}
-      <div className="relative my-7">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-stone-200"></div>
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-transparent px-2.5 text-stone-500 font-semibold">Or continue with</span>
-        </div>
-      </div>
-
-      {/* Social Login Button */}
-      <button
-        onClick={handleMockGoogleLogin}
-        type="button"
-        className="btn w-full bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 hover:border-stone-300 rounded-2xl font-bold py-3 flex items-center justify-center gap-2.5 shadow-sm transition-all active:scale-[0.99]"
-      >
-        {/* Google Icon SVG */}
-        <svg className="h-5 w-5" viewBox="0 0 24 24" width="24" height="24">
-          <g transform="matrix(1, 0, 0, 1, 0, 0)">
-            <path
-              d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.99,2.37 -2.1,3.12v2.6h3.39c1.98,-1.82 3.12,-4.5 3.12,-7.62c0,-0.61 -0.06,-1.2 -0.16,-1.8Z"
-              fill="#4285F4"
-            />
-            <path
-              d="M12,20.7c2.43,0 4.47,-0.81 5.96,-2.2l-3.39,-2.6c-0.94,0.63 -2.14,1.01 -3.57,1.01c-2.75,0 -5.07,-1.86 -5.9,-4.36H1.58v2.68c1.55,3.09 4.77,5.07 8.42,5.07Z"
-              fill="#34A853"
-            />
-            <path
-              d="M6.1,12.55c-0.22,-0.66 -0.35,-1.37 -0.35,-2.1c0,-0.73 0.13,-1.44 0.35,-2.1V5.68H1.58c-0.78,1.55 -1.22,3.31 -1.22,5.17c0,1.86 0.44,3.62 1.22,5.17l3.82,-2.68c-0.22,-0.66 -0.35,-1.37 -0.35,-2.1Z"
-              fill="#FBBC05"
-            />
-            <path
-              d="M12,4.8c1.32,0 2.51,0.45 3.44,1.35l2.58,-2.58C16.46,2.1 14.43,1.3 12,1.3C8.35,1.3 5.13,3.28 3.58,6.37l3.82,2.68C8.23,6.54 10.55,4.8 12,4.8Z"
-              fill="#EA4335"
-            />
-          </g>
-        </svg>
-        Google Social Login
-      </button>
 
       <p className="text-center text-sm text-stone-600 mt-8">
         Don&apos;t have an account?{" "}

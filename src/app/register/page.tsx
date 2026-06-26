@@ -59,73 +59,6 @@ export default function Register() {
     }
   };
 
-  const handleMockGoogleLogin = async () => {
-    const mockEmail = "google-examiner@suncart.com";
-    const mockName = "Google Examiner";
-    const mockImage = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80";
-    const mockPassword = "GoogleMockPassword123!";
-
-    try {
-      toast.loading("Connecting mock Google account...", { id: "google-auth" });
-
-      await authClient.signIn.email(
-        {
-          email: mockEmail,
-          password: mockPassword,
-          callbackURL: "/",
-        },
-        {
-          onSuccess: () => {
-            toast.success("Successfully logged in as Google User!", { id: "google-auth" });
-            router.push("/");
-            router.refresh();
-          },
-          onError: async (ctx) => {
-            // If account doesn't exist, create it then sign in
-            if (
-              ctx.error.message.toLowerCase().includes("credentials") ||
-              ctx.error.message.toLowerCase().includes("user") ||
-              ctx.error.message.toLowerCase().includes("invalid")
-            ) {
-              try {
-                await authClient.signUp.email({
-                  email: mockEmail,
-                  password: mockPassword,
-                  name: mockName,
-                  image: mockImage,
-                });
-
-                await authClient.signIn.email(
-                  {
-                    email: mockEmail,
-                    password: mockPassword,
-                    callbackURL: "/",
-                  },
-                  {
-                    onSuccess: () => {
-                      toast.success("Successfully logged in as Google User!", { id: "google-auth" });
-                      router.push("/");
-                      router.refresh();
-                    },
-                    onError: (ctx2) => {
-                      toast.error(ctx2.error.message || "Failed mock login", { id: "google-auth" });
-                    },
-                  }
-                );
-              } catch (signUpErr: any) {
-                toast.error(signUpErr.message || "Failed to register mock Google account", { id: "google-auth" });
-              }
-            } else {
-              toast.error(ctx.error.message || "Failed mock login", { id: "google-auth" });
-            }
-          },
-        }
-      );
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong", { id: "google-auth" });
-    }
-  };
-
   return (
     <div className="flex-grow flex items-center justify-center py-16 px-4 relative overflow-hidden bg-gradient-to-br from-amber-50 via-stone-50 to-orange-50">
       {/* Decorative Blur Spheres */}
@@ -239,52 +172,12 @@ export default function Register() {
           {/* Register Button */}
           <button
             type="submit"
-            className="btn w-full bg-amber-500 hover:bg-amber-600 border-none text-white rounded-2xl font-bold py-3 mt-4 shadow-lg shadow-amber-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:bg-amber-300"
+            className="btn w-full bg-amber-500 hover:bg-amber-600 border-none text-white rounded-2xl font-bold py-3.5 mt-4 shadow-lg shadow-amber-500/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:bg-amber-300"
             disabled={isLoading}
           >
             {isLoading ? <span className="loading loading-spinner loading-sm"></span> : "Create Account"}
           </button>
         </form>
-
-        {/* Divider */}
-        <div className="relative my-7">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-stone-200"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-transparent px-2.5 text-stone-500 font-semibold">Or continue with</span>
-          </div>
-        </div>
-
-        {/* Social Login Button */}
-        <button
-          onClick={handleMockGoogleLogin}
-          type="button"
-          className="btn w-full bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 hover:border-stone-300 rounded-2xl font-bold py-3 flex items-center justify-center gap-2.5 shadow-sm transition-all active:scale-[0.99]"
-        >
-          {/* Google Icon SVG */}
-          <svg className="h-5 w-5" viewBox="0 0 24 24" width="24" height="24">
-            <g transform="matrix(1, 0, 0, 1, 0, 0)">
-              <path
-                d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.99,2.37 -2.1,3.12v2.6h3.39c1.98,-1.82 3.12,-4.5 3.12,-7.62c0,-0.61 -0.06,-1.2 -0.16,-1.8Z"
-                fill="#4285F4"
-              />
-              <path
-                d="M12,20.7c2.43,0 4.47,-0.81 5.96,-2.2l-3.39,-2.6c-0.94,0.63 -2.14,1.01 -3.57,1.01c-2.75,0 -5.07,-1.86 -5.9,-4.36H1.58v2.68c1.55,3.09 4.77,5.07 8.42,5.07Z"
-                fill="#34A853"
-              />
-              <path
-                d="M6.1,12.55c-0.22,-0.66 -0.35,-1.37 -0.35,-2.1c0,-0.73 0.13,-1.44 0.35,-2.1V5.68H1.58c-0.78,1.55 -1.22,3.31 -1.22,5.17c0,1.86 0.44,3.62 1.22,5.17l3.82,-2.68c-0.22,-0.66 -0.35,-1.37 -0.35,-2.1Z"
-                fill="#FBBC05"
-              />
-              <path
-                d="M12,4.8c1.32,0 2.51,0.45 3.44,1.35l2.58,-2.58C16.46,2.1 14.43,1.3 12,1.3C8.35,1.3 5.13,3.28 3.58,6.37l3.82,2.68C8.23,6.54 10.55,4.8 12,4.8Z"
-                fill="#EA4335"
-              />
-            </g>
-          </svg>
-          Google Social Login
-        </button>
 
         <p className="text-center text-sm text-stone-600 mt-8">
           Already have an account?{" "}
