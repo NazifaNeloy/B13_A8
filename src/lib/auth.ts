@@ -31,4 +31,8 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  advanced: {
+    // Disable strict origin check to prevent "Invalid origin" errors on Vercel/Render deployments
+    disableOriginCheck: true,
+  },
 });
